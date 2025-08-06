@@ -1,15 +1,18 @@
-import { UserRepository } from "../repositories/UserRepository";
-import { AuthService } from "../services/AuthService";
+//import { UserRepository } from "../repositories/UserRepository";
+//import { AuthService } from "../services/AuthService";
+
+import { NotificationService } from "../services/NotificationSercice";
+import { NotificationRepository } from "../repositories";
 
 export interface IContainer {
-  getUserRepository(): UserRepository;
-  getAuthService(): AuthService;
+  getNotificationRepository(): NotificationRepository;
+  getNotificationService(): NotificationService;
 }
 
 export class Container implements IContainer {
   private static instance: Container;
-  private userRepository: UserRepository | null = null;
-  private authService: AuthService | null = null;
+  private notificationRepository: NotificationRepository | null = null;
+  private notificationService: NotificationService | null = null;
 
   private constructor() {}
 
@@ -20,18 +23,20 @@ export class Container implements IContainer {
     return Container.instance;
   }
 
-  public getUserRepository(): UserRepository {
-    if (!this.userRepository) {
-      this.userRepository = new UserRepository();
+  public getNotificationRepository(): NotificationRepository {
+    if (!this.notificationRepository) {
+      this.notificationRepository = new NotificationRepository();
     }
-    return this.userRepository;
+    return this.notificationRepository;
   }
 
-  public getAuthService(): AuthService {
-    if (!this.authService) {
-      this.authService = new AuthService(this.getUserRepository());
+  public getNotificationService(): NotificationService {
+    if (!this.notificationService) {
+      this.notificationService = new NotificationService(
+        this.getNotificationRepository()
+      );
     }
-    return this.authService;
+    return this.notificationService;
   }
 }
 
